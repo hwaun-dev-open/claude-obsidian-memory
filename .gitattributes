@@ -1,0 +1,4 @@
+# This repo is conventions and documentation, not a shell tool. Count the Markdown,
+# otherwise GitHub reports it as 100% Shell on the strength of two small hooks.
+*.md linguist-detectable=true
+*.template linguist-detectable=true linguist-language=Markdown

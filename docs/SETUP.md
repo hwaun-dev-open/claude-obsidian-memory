@@ -67,7 +67,7 @@ then edit:
 
 ```bash
 cp -r .claude /path/to/your/project/
-chmod +x /path/to/your/project/.claude/hooks/check-uncommitted.sh
+chmod +x /path/to/your/project/.claude/hooks/*.sh
 ```
 
 Two hooks run on Stop.

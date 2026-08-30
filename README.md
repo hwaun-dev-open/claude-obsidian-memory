@@ -28,7 +28,8 @@ Everything here is plain Markdown and one shell script. Nothing to install, noth
 2. Copy `.mcp.json.example` to `.mcp.json` in your project and paste the key in. **Do not commit it.**
 3. Copy `CLAUDE.md.template` into your project as `CLAUDE.md` and edit the paths near the top.
 4. Copy the `obsidian/` folder into your vault as `Claude Code/`.
-5. Copy `.claude/` into your project. `chmod +x .claude/hooks/check-uncommitted.sh`.
+5. Copy `.claude/` into your project, then `chmod +x .claude/hooks/*.sh` — **both** hooks
+   need it, and a hook without the execute bit fails silently.
 
 Full walkthrough in [docs/SETUP.md](docs/SETUP.md).
 
