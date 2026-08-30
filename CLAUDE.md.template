@@ -29,9 +29,10 @@ Save at whichever comes first. Don't wait to be asked.
 `Claude Code/Sessions/<project>/YYYY-MM-DD - <topic>.md`, following the template at
 `Claude Code/Templates/session-log.md`.
 
-**Always fill in `summary` and `aliases`.** These are the only fields search can match on next
-time. `summary` is one line on what happened; `aliases` are the other ways the user might refer
-to it later. A note saved with an empty `summary` is a note you will never find again.
+**Always fill in `summary` and `aliases`.** These are the fields the session-start lookup matches
+on. `summary` is one line on what happened; `aliases` are the other ways the user might refer to
+it later. A note saved with an empty `summary` won't show up when listing recent topics — full-text
+search can still reach it, but only if the user already remembers a phrase from the body.
 
 Several topics in one day means several notes — vary the `<topic>` part.
 

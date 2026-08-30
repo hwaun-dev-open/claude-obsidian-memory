@@ -46,7 +46,10 @@ So the two consumers are split on purpose:
 - **`_index.md` (Dataview)** — for you. A table you can skim.
 - **`search_query` against frontmatter** — for Claude. It searches `summary` and `aliases` directly.
 
-This is why `summary` and `aliases` are mandatory in the template and not decoration. They are the only thing Claude can actually search on. A note saved with an empty `summary` is a note Claude will never find again.
+This is why `summary` and `aliases` are mandatory in the template and not decoration. They are what the
+session-start lookup matches on. A note saved with an empty `summary` won't appear in that list — you can
+still reach it by full-text search, but only if you already know a phrase from its body, which is exactly
+what you don't have when you're asking what you were working on last week.
 
 ## Why use this when Claude Code already has built-in memory
 

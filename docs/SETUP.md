@@ -93,8 +93,9 @@ CLAUDE_PROJECT_DIR=/path/to/your/project .claude/hooks/check-uncommitted.sh
 3. Start a new session and ask to continue that topic by name. Claude should find the note via
    `search_query` and pick up from it.
 
-Step 2 is the one that actually matters. Everything else can be wrong and recoverable; an empty
-`summary` cannot.
+Step 2 is the one that actually matters. An empty `summary` doesn't destroy the note — full-text
+search still reaches it — but it drops out of the session-start list, which is the one place you
+look when you can't remember what you were doing.
 
 ## Troubleshooting
 
@@ -114,3 +115,30 @@ that clause, long sessions end up as one unsearchable note.
 **Hook prints nothing, ever.**
 That's the intended behavior when everything is clean. Make an uncommitted change and run it
 directly to confirm. If it's still silent, check `jq` is installed and the script is executable.
+
+---
+
+## Verified behavior
+
+Measured against Obsidian Local REST API over MCP, 2026-08-30. Two notes were placed in a test
+folder — one with `summary` and `aliases` filled, one with both empty — and both contained the
+same unique keyword **in the body**. Alongside them, an `_index.md` holding a Dataview query over
+that folder.
+
+| Query | Result |
+|---|---|
+| `regexp` on `frontmatter.summary` | Note A only |
+| `in` on `frontmatter.aliases` | Note A only |
+| `regexp` on `content` | **Both notes** |
+| `vault_read` on `_index.md` | The query source. **Zero rows.** |
+
+Two things follow, and they're the reason this repo exists.
+
+**The Dataview index is invisible to Claude.** Reading `_index.md` returned the fenced
+` ```dataview ` block verbatim — the table you see in Obsidian is rendered client-side and never
+reaches the API. Neither note appeared anywhere in the response. Point Claude at the index and it
+sees an empty document with confidence.
+
+**An empty `summary` is a downgrade, not a deletion.** Full-text search still found note B. What
+it lost is the session-start lookup, which matches on `summary` and `aliases` — the one path that
+works when you don't yet remember any keyword to search for.
