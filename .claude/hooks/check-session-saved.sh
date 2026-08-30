@@ -35,15 +35,27 @@ fi
 # Nag at most once per day, so a failed save (MCP down, vault unmounted) can't trap the session.
 MARKER="$ROOT/.claude/.session-save-prompted"
 [ -f "$MARKER" ] && [ "$(cat "$MARKER" 2>/dev/null)" = "$TODAY" ] && exit 0
-echo "$TODAY" > "$MARKER"
+
+# Write the guard *before* blocking. If it can't be written — $ROOT has no .claude directory,
+# read-only filesystem — fail open and let the stop through. Blocking without a working guard
+# would repeat on every Stop and the session could never end.
+mkdir -p "$(dirname "$MARKER")" 2>/dev/null || exit 0
+echo "$TODAY" > "$MARKER" 2>/dev/null || exit 0
 
 jq -cn --arg p "$PROJECT" '{
   hookSpecificOutput: {
     hookEventName: "Stop",
     decision: "block",
-    reason: ("この会話のセッションログがまだ保存されていません。CLAUDE.md の「保存のタイミング」に従い、"
-      + "Claude Code/Sessions/" + $p + "/YYYY-MM-DD - <topic>.md に保存してください。"
-      + "frontmatter の summary と aliases を必ず埋めること（次回の検索で使う唯一の手がかりのため）。"
-      + "保存したら、その日のデイリーノートの ## Claude Code 見出しにもリンクを追記してください。")
+    reason: ("The session log for this conversation has not been saved yet. Following the "
+      + "\"When to save\" rules in CLAUDE.md, write it to Claude Code/Sessions/" + $p
+      + "/YYYY-MM-DD - <topic>.md. Fill in summary and aliases in the frontmatter — they are "
+      + "what the next session searches on. Then add a link under the ## Claude Code heading "
+      + "of today\u0027s daily note.")
   }
 }'
+
+# Japanese users: swap the reason above for this one.
+#   reason: ("この会話のセッションログがまだ保存されていません。CLAUDE.md の「保存のタイミング」に従い、"
+#     + "Claude Code/Sessions/" + $p + "/YYYY-MM-DD - <topic>.md に保存してください。"
+#     + "frontmatter の summary と aliases を必ず埋めること（次回の検索で使う手がかりのため）。"
+#     + "保存したら、その日のデイリーノートの ## Claude Code 見出しにもリンクを追記してください。")

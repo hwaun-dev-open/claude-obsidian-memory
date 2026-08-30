@@ -93,3 +93,8 @@ NotebookLMからObsidianへワンクリックで戻れるようにする。
 `.claude/settings.json` の Stop フックが `.claude/hooks/check-uncommitted.sh` を実行し、
 未コミットの変更があるリポジトリだけを警告する（クリーンなら無出力）。
 除外したいディレクトリはスクリプト冒頭の `EXCLUDES` に追記する。
+
+---
+
+**このファイルと `CLAUDE.md.template` は翻訳関係ではなく、並行して存在するもの。**
+どちらも他方から生成されていないため、片方を直しても反映されない。両方を直すこと。

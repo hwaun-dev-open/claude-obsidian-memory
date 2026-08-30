@@ -31,8 +31,12 @@ Three moments you *can* observe. **Save as soon as any of them happens**, withou
 3. **You commit.** Reaching a working checkpoint counts as a natural break.
 
 **One note per session, as a rule.** On the second and later breaks within the same topic, don't
-create another note — **update the existing one**: append to `## 何をしたか` and rewrite `summary`
-to reflect where things now stand. Only a change of topic starts a new note.
+create another note — **update the existing one**: append to the "what happened" section and
+rewrite `summary` to reflect where things now stand. Only a change of topic starts a new note.
+
+> The shipped `session-log.md` uses Japanese headings (`## 何をしたか` / `## 決定事項` /
+> `## 次にやること`). Rename them in the template if you prefer English — nothing depends on
+> the wording, only on `summary` and `aliases` in the frontmatter.
 
 ## Where to save
 
@@ -91,3 +95,8 @@ workspace a single repo.
 The `Stop` hook in `.claude/settings.json` runs `.claude/hooks/check-uncommitted.sh`, which warns
 only about repositories that have uncommitted changes. It prints nothing when everything is clean.
 Edit the `EXCLUDES` list at the top of the script for directories it should skip.
+
+---
+
+**This file and `CLAUDE.ja.md.template` are parallel, not translations.** Neither is generated from
+the other, so a change to one does not propagate. Edit both.

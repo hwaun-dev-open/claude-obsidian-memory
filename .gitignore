@@ -7,3 +7,7 @@ node_modules
 
 # Stop-hook state — per machine, not worth tracking.
 .claude/.session-save-prompted
+
+# Claude Code writes machine-local settings here. Copying .claude/ into a project
+# should not drag someone else's local overrides along.
+.claude/settings.local.json
