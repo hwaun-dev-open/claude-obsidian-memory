@@ -1,0 +1,82 @@
+<!-- Copy this into your project as CLAUDE.md and edit the bracketed parts. -->
+
+# Obsidian session log
+
+This project is connected to an Obsidian vault over MCP (the `obsidian` server in `.mcp.json`).
+
+## At the start of a session
+
+- If the user's first message names a topic, date, or alias, go straight to that note with
+  `search_query` (match on `frontmatter.summary`, `frontmatter.aliases`, or a path glob),
+  read it, and continue from there. Don't present a list.
+- If they don't, use `search_query` to pull the most recent few notes under
+  `Claude Code/Sessions/<project>/`, show their `frontmatter.summary` newest-first, and ask
+  which to resume or whether to start something new.
+- **Never search via `Claude Code/Sessions/<project>/_index.md`.** It's a Dataview index for
+  humans to read. Dataview renders at display time, so reading the file over MCP returns the
+  query text, not results. Always search frontmatter directly with `search_query`.
+
+## When to save
+
+Save at whichever comes first. Don't wait to be asked.
+
+- The session reaches a natural end.
+- **The topic changes** — the previous thread wrapped up and a different subject starts. Save the
+  note for the finished topic at that point, and start the next topic as a new note.
+
+## Where to save
+
+`Claude Code/Sessions/<project>/YYYY-MM-DD - <topic>.md`, following the template at
+`Claude Code/Templates/session-log.md`.
+
+**Always fill in `summary` and `aliases`.** These are the only fields search can match on next
+time. `summary` is one line on what happened; `aliases` are the other ways the user might refer
+to it later. A note saved with an empty `summary` is a note you will never find again.
+
+Several topics in one day means several notes — vary the `<topic>` part.
+
+Also append a link to each saved note under the `## Claude Code` heading of that day's daily note.
+
+<!-- Optional: delete this section if you don't use NotebookLM.
+# NotebookLM research notes
+
+One NotebookLM notebook = one Obsidian note, at `Claude Code/Research/<project>/<notebook>.md`,
+from the template at `Claude Code/Templates/research-note.md`.
+
+Keep all questions for the same notebook in the same file, stacked as
+`## YYYY-MM-DD: <question> ^qYYYYMMDD-N`. Always set `notebook_url` in the frontmatter so the
+note links out to NotebookLM.
+
+For the return trip, create one note inside the NotebookLM notebook containing
+`obsidian://open?vault=<vault>&file=<url-encoded vault-relative path>`, so the notebook links
+back to Obsidian in one click.
+-->
+
+# Git
+
+All work in this project happens under git. One repository per app — don't make the whole
+workspace a single repo.
+
+- **Before editing**: check the target is a repository (`git -C <dir> status`). If it isn't,
+  `git init` and make an initial commit before touching anything. If there are uncommitted
+  changes already, ask before mixing your own work in.
+- **After editing**: commit at each working checkpoint. Don't wait to be asked. One commit per
+  change, with a message that says what changed.
+- **Never create `.bak` files.** Commit instead — that's what git is for. No
+  `index.html.bak-<label>-<date>` style backups.
+- **New tool**: create `apps/<tool-name>/` and **`git init` before writing anything**.
+- **`.gitignore`**: exclude `node_modules`, build and test output, regenerable large assets
+  (track the generator, ignore the output), `.DS_Store`, and credentials (`*.env`).
+  - ⚠ A trailing slash (`tests/node_modules/`) **matches directories only and lets symlinks
+    through**. Drop the slash where a symlink is possible.
+
+<!-- Fill these in for your setup:
+- Excluded from git: [directories you deliberately keep untracked]
+- Commit identity: [set globally; don't use a real email address here]
+-->
+
+## Uncommitted-change warnings
+
+The `Stop` hook in `.claude/settings.json` runs `.claude/hooks/check-uncommitted.sh`, which warns
+only about repositories that have uncommitted changes. It prints nothing when everything is clean.
+Edit the `EXCLUDES` list at the top of the script for directories it should skip.

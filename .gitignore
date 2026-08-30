@@ -1,0 +1,6 @@
+# Never commit the real MCP config — it carries your API key.
+.mcp.json
+
+.DS_Store
+node_modules
+*.log
