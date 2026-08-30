@@ -18,6 +18,7 @@ Everything here is plain Markdown and one shell script. Nothing to install, noth
 | `obsidian/Templates/research-note.md` | Research notes (optional, for NotebookLM users) |
 | `obsidian/Sessions/_index.md` | A Dataview index — for humans, not for Claude (see below) |
 | `.claude/settings.json` | Wires up the Stop hook |
+| `.claude/hooks/check-session-saved.sh` | Backstop: blocks the stop once if the session wasn't logged |
 | `.claude/hooks/check-uncommitted.sh` | Warns about uncommitted changes when Claude stops |
 | `.mcp.json.example` | Obsidian MCP connection, with the token blanked out |
 
@@ -50,6 +51,17 @@ This is why `summary` and `aliases` are mandatory in the template and not decora
 session-start lookup matches on. A note saved with an empty `summary` won't appear in that list — you can
 still reach it by full-text search, but only if you already know a phrase from its body, which is exactly
 what you don't have when you're asking what you were working on last week.
+
+## The second thing that will bite you
+
+**Don't tell Claude to save "when the session ends."** It can't observe that. It answers and
+stops; nothing distinguishes "the user is about to type again" from "the session is over." A rule
+phrased that way never fires in a one-task conversation — which is most of them.
+
+We shipped that phrasing, tested it on a single-task session, and got zero notes. The rules here
+now fire on three things Claude *can* see: the request completing, the topic changing, and a
+commit landing. `check-session-saved.sh` is the backstop — if no note exists for today, it blocks
+the stop once and tells Claude to write one.
 
 ## Why use this when Claude Code already has built-in memory
 

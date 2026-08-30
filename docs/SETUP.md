@@ -70,8 +70,19 @@ cp -r .claude /path/to/your/project/
 chmod +x /path/to/your/project/.claude/hooks/check-uncommitted.sh
 ```
 
-Open the script and edit `EXCLUDES` for directories it should ignore, and `MAXDEPTH` for how deep
-to search.
+Two hooks run on Stop.
+
+`check-uncommitted.sh` — edit `EXCLUDES` for directories to ignore and `MAXDEPTH` for how deep to
+search.
+
+`check-session-saved.sh` — **set `VAULT` to your vault's absolute path**, and `PROJECT` if the
+folder under `Claude Code/Sessions/` isn't named after your project directory. Left empty, the
+hook disables itself and stays silent, so it's safe to ship unconfigured.
+
+It blocks the stop **once per day** when no note exists for today, then lets it through. That cap
+is deliberate: if a save fails because the vault is unmounted or MCP is down, you don't want the
+session trapped. The trade-off is that on your second session of a day it won't nag, since a note
+already exists — the CLAUDE.md rules are the primary mechanism and this is only a net.
 
 If your setup doesn't expand `$CLAUDE_PROJECT_DIR` in hook commands, put the absolute path in
 `.claude/settings.json` instead.
@@ -86,8 +97,10 @@ CLAUDE_PROJECT_DIR=/path/to/your/project .claude/hooks/check-uncommitted.sh
 
 ## Checking it works
 
-1. Start a session, do something small, and let it end. Claude should write a note under
-   `Claude Code/Sessions/<project>/`.
+1. Start a session and give it **one small task, then nothing else**. Don't say "save this" or
+   "commit that" — the point is whether it acts unprompted. Claude should write a note under
+   `Claude Code/Sessions/<project>/` when the task completes, before the session goes anywhere
+   near ending.
 2. Open the note. **`summary` and `aliases` must not be empty.** If they are, the rules aren't
    being followed and the note is effectively lost — the next session won't find it.
 3. Start a new session and ask to continue that topic by name. Claude should find the note via

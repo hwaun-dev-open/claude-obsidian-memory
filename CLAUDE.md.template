@@ -18,11 +18,21 @@ This project is connected to an Obsidian vault over MCP (the `obsidian` server i
 
 ## When to save
 
-Save at whichever comes first. Don't wait to be asked.
+**Do not wait for the session to end.** You cannot observe that. You answer and stop; nothing
+tells you whether the next thing is another message or the end of the session. A rule that waits
+for the end never fires in a conversation that was one task long — which is most of them.
 
-- The session reaches a natural end.
-- **The topic changes** — the previous thread wrapped up and a different subject starts. Save the
-  note for the finished topic at that point, and start the next topic as a new note.
+Three moments you *can* observe. **Save as soon as any of them happens**, without being asked:
+
+1. **The user's request is complete and you're handing control back.** Save before you answer.
+   This is the main trigger.
+2. **The topic changes.** Finalize the note for the finished topic at that point, and start the
+   next topic as a new note.
+3. **You commit.** Reaching a working checkpoint counts as a natural break.
+
+**One note per session, as a rule.** On the second and later breaks within the same topic, don't
+create another note — **update the existing one**: append to `## 何をしたか` and rewrite `summary`
+to reflect where things now stand. Only a change of topic starts a new note.
 
 ## Where to save
 
