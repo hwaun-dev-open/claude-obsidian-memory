@@ -22,6 +22,24 @@ Everything here is plain Markdown and one shell script. Nothing to install, noth
 | `.claude/hooks/check-uncommitted.sh` | Warns about uncommitted changes when Claude stops |
 | `.mcp.json.example` | Obsidian MCP connection, with the token blanked out |
 
+## Before you copy this
+
+This repo asks you to drop files into your project that your coding agent will read as trusted
+instructions — a `CLAUDE.md` and two hooks that execute on your machine. That is exactly the
+channel a poisoned repository uses: hidden instructions in `CLAUDE.md`, `.cursor/rules`, or an
+HTML comment inside `README.md`, loaded by the agent as legitimate project guidance.
+
+So please don't copy any of it blind — not this repo, not anyone's.
+
+- Read `CLAUDE.md.template` in full. It is ~90 lines; that is deliberate.
+- Read both hook scripts. They are ~50 lines each and run on your machine when the agent stops.
+- Read this README as raw text (`cat README.md`), not just rendered. HTML comments are invisible
+  when rendered.
+
+Nothing here executes anything at install time, there is no package to install, and the only
+network call any of it makes is your own Obsidian instance on localhost. Verify that for yourself
+rather than taking my word for it.
+
 ## Setup
 
 1. In Obsidian, install the **Local REST API** community plugin and copy its API key.
