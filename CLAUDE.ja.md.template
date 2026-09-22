@@ -12,6 +12,11 @@
 - 明示がない場合は、`search_query` で `Claude Code/Sessions/<project>/` 配下のノートの
   `frontmatter.summary` を新しい順に数件取得し、直近の話題をリスト形式で提示して
   「どれを再開するか／新規か」を問いかける。選択に応じて該当ノートを読み込むか、新規で開始する。
+- **話題を探すときは、`summary` と `aliases` を連結した文字列に対して部分一致させる。**
+  `{"in": ["<語>", {"cat": [{"var": "frontmatter.summary"}, " ", {"var": "frontmatter.aliases"}]}]}`
+  `aliases` に直接 `in` を使わない — 配列に対しては要素の完全一致になり、ユーザーの言い方の一部
+  （「ソニー」）では「ソニーが大幅にズレる」のような alias に当たらない。複数ヒットしたら新しい順に
+  並べて選ばせる。0件のときは語を短くして1回だけ検索し直してから「見つからない」と言う。
 - **`Claude Code/Sessions/<project>/_index.md` を検索に使ってはいけない。**
   これはDataviewで自動集計される人間閲覧用の目次であり、Dataviewは表示時にレンダリングされるため、
   MCP経由でファイルを読むとクエリの生テキストしか返らない。Claudeは常に`search_query`で

@@ -145,6 +145,13 @@ that folder.
 | `regexp` on `content` | **Both notes** |
 | `vault_read` on `_index.md` | The query source. **Zero rows.** |
 
+The `in` row above passed an alias's **exact** text. A fragment of it does not match. Measured
+2026-09-22 on the author's vault: a note with the alias `ソニーが大幅にズレる` ("Sony drifts
+badly") was **not** returned by `{"in": ["ソニー", {"var": "frontmatter.aliases"}]}` — zero
+results. On an array, `in` checks for a whole element. Joining `summary` and `aliases` with `cat`
+first turns it into a substring match; the same word then returned that note. This is what the
+templates now instruct.
+
 Two things follow, and they're the reason this repo exists.
 
 **The Dataview index is invisible to Claude.** Reading `_index.md` returned the fenced

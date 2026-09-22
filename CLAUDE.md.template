@@ -12,6 +12,13 @@ This project is connected to an Obsidian vault over MCP (the `obsidian` server i
 - If they don't, use `search_query` to pull the most recent few notes under
   `Claude Code/Sessions/<project>/`, show their `frontmatter.summary` newest-first, and ask
   which to resume or whether to start something new.
+- **To find a topic, match against `summary` and `aliases` joined together**, not against
+  `aliases` directly:
+  `{"in": ["<word>", {"cat": [{"var": "frontmatter.summary"}, " ", {"var": "frontmatter.aliases"}]}]}`.
+  On an array, `in` only matches a whole element, so a fragment of what the user says ("Sony")
+  misses an alias like "Sony drifts badly". Joined into one string, `in` becomes a substring
+  match. If several notes match, list them newest-first and let the user pick. If none match,
+  retry once with a shorter word before saying nothing was found.
 - **Never search via `Claude Code/Sessions/<project>/_index.md`.** It's a Dataview index for
   humans to read. Dataview renders at display time, so reading the file over MCP returns the
   query text, not results. Always search frontmatter directly with `search_query`.
